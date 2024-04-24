@@ -9,7 +9,7 @@ public class Apartado1 {
     //Modificar
     public static Scanner sc = new Scanner(System.in);
 
-    private static final String nombFich = "./src/Apartado1.txt";
+    private static final String nombFich = "./src/Apartado1/Apartado1.txt";
     private static final String SPLIT = "//";
 
     public static void crearFichero() {
@@ -79,7 +79,7 @@ public class Apartado1 {
 
     public static void modificarRegistro(String DNI){
         File fileOriginal = new File(nombFich);
-        File fileTemp = new File("./src/Apartado1Temp.txt");
+        File fileTemp = new File("./src/Apartado1/Apartado1Temp.txt");
         try(BufferedReader br = new BufferedReader(new FileReader(nombFich));
         BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp))) {
 
