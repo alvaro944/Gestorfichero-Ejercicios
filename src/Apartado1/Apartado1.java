@@ -172,6 +172,7 @@ public class Apartado1 {
                 case 4:
                     System.out.println("Leer Fichero");
                     leerFichero();
+                    break;
             }
         }
     }

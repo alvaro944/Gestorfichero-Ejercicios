@@ -1,11 +1,11 @@
-package Apartado2;
+package Apartado3;
 
 import java.io.*;
 import java.util.Scanner;
 
-public class Apartado2 {
+public class Apartado3 {
     //El fichero va a consistir de 4 campos, ID (campo Clave), DNI, Nombre y Departamento
-    private static final String nombFich = "./src/Apartado2/Apartado2.txt";
+    private static final String nombFich = "./src/Apartado3/Apartado3.txt";
     private static final String SPLIT = "//";
 
     private static String formato = "";
@@ -188,6 +188,48 @@ public class Apartado2 {
         }
     }
 
+    public static void borrarRegsitro() {
+        File fileOriginal = new File(nombFich);
+        File fileTemp = new File(nombFich + ".temp");
+
+        System.out.print("\n[+] Introduce un " + formato.split(SPLIT)[0] + " para borrar: ");
+        String textoBusqueda = sc.nextLine();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(nombFich));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp, true))) {
+            String linea = br.readLine(); //Saltamos la línea del formato
+            bw.write(linea);
+            bw.newLine();
+
+            while ((linea = br.readLine()) != null) {
+
+                if ((linea.split(SPLIT)[0].equals(textoBusqueda))) {
+                    linea = "!!" + linea;
+                    System.out.println("\n[+] Coincidencia encontrada, se marca el registro como borrado ");
+                    bw.write(linea);
+                    bw.newLine();
+                    bw.flush();
+
+                } else {
+                    bw.write(linea);
+                    bw.newLine();
+                    bw.flush();
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // Renombrar el archivo temporal para reemplazar el original
+        if (fileOriginal.delete()) {
+            fileTemp.renameTo(fileOriginal);
+        } else {
+            System.err.println("No se pudo eliminar el archivo original.");
+        }
+    }
+
 
     public static void menu() {
         System.out.println("\nMENÚ");
@@ -196,6 +238,7 @@ public class Apartado2 {
         System.out.println("2 - Recuperar registro");
         System.out.println("3 - Modificar registro");
         System.out.println("4 - Leer fichero");
+        System.out.println("5 - Borrar registro");
     }
 
     public static void main(String[] args) {
@@ -225,6 +268,9 @@ public class Apartado2 {
                     break;
                 case 4:
                     leerFichero(); //Leer fichero
+                    break;
+                case 5:
+                    borrarRegsitro();
                     break;
             }
         }

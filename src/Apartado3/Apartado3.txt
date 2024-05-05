@@ -1,0 +1,3 @@
+Dni//Nombre//Apellido//Empleo//
+48776886G//Álvaro//Cervantes//Inspector de Calidad//
+!!12345678A//Pepe//García//Electricista//

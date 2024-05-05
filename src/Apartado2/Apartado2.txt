@@ -1,0 +1,3 @@
+Dni//Nombre//Apellido//Color//
+48776886G//Álvaro//Cervantes//Azul//
+12345678A//Jose//García//Amarillo//
