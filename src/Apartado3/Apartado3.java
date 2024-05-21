@@ -7,6 +7,7 @@ public class Apartado3 {
     //El fichero va a consistir de 4 campos, ID (campo Clave), DNI, Nombre y Departamento
     private static final String nombFich = "./src/Apartado3/Apartado3.txt";
     private static final String SPLIT = "//";
+    private static final String MARCA_BORRADO = "!!";
 
     private static String formato = "";
     private static int longFormato;
@@ -90,13 +91,15 @@ public class Apartado3 {
             System.out.println("\n[+] Contenido del fichero:");
             while ((linea = br.readLine()) != null) {
                 String coma = ", ";
-                for (int i = 0; i < longFormato; i++) {
-                    if (i == longFormato - 1) {
-                        coma = "";
+                if(!linea.startsWith("!!")) {
+                    for (int i = 0; i < longFormato; i++) {
+                        if (i == longFormato - 1) {
+                            coma = "";
+                        }
+                        System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
                     }
-                    System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
+                    System.out.println();
                 }
-                System.out.println();
             }
 
         } catch (FileNotFoundException e) {
@@ -106,6 +109,10 @@ public class Apartado3 {
         }
     }
 
+    /**
+     * Añadimos que no lea las líneas marcadas como borradas
+     * Las que comienzan por "!!"
+     */
     public static void recuperarRegistro() {
         System.out.print("\n[+] Introduce un " + formato.split(SPLIT)[0] + " a buscar: ");
         String textoBusqueda = sc.nextLine();
@@ -138,6 +145,9 @@ public class Apartado3 {
         }
     }
 
+    /**
+     * Pide un campo clave del registro para modificar sus datos
+     */
     public static void modificarRegistro() {
         File fileOriginal = new File(nombFich);
         File fileTemp = new File(nombFich + ".temp");
@@ -188,6 +198,10 @@ public class Apartado3 {
         }
     }
 
+    /**
+     * Marca como borrado añadiendo '!!', delante del registro
+     * Para conseguir esto vamos escribiendo el registro en un fichero temporal que luego sustituimos
+     */
     public static void borrarRegsitro() {
         File fileOriginal = new File(nombFich);
         File fileTemp = new File(nombFich + ".temp");
@@ -204,7 +218,7 @@ public class Apartado3 {
             while ((linea = br.readLine()) != null) {
 
                 if ((linea.split(SPLIT)[0].equals(textoBusqueda))) {
-                    linea = "!!" + linea;
+                    linea = MARCA_BORRADO + linea;
                     System.out.println("\n[+] Coincidencia encontrada, se marca el registro como borrado ");
                     bw.write(linea);
                     bw.newLine();
@@ -255,7 +269,7 @@ public class Apartado3 {
 
             switch (opcion) {
                 case 0:
-                    System.out.println("Saliendo...");
+                    System.out.println("Saliendo del apartado 3...");
                     break;
                 case 1: //Escribir
                     escribirRegistro();

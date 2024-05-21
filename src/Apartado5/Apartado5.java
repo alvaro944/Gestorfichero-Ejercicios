@@ -1,12 +1,13 @@
-package Apartado2;
+package Apartado5;
 
 import java.io.*;
 import java.util.Scanner;
 
-public class Apartado2 {
+public class Apartado5 {
     //El fichero va a consistir de 4 campos, ID (campo Clave), DNI, Nombre y Departamento
-    private static final String nombFich = "./src/Apartado2/Apartado2.txt";
+    private static final String nombFich = "./src/Apartado4/Apartado4.txt";
     private static final String SPLIT = "//";
+    private static final String MARCA_BORRADO = "!!";
 
     private static String formato = "";
     private static int longFormato;
@@ -90,13 +91,15 @@ public class Apartado2 {
             System.out.println("\n[+] Contenido del fichero:");
             while ((linea = br.readLine()) != null) {
                 String coma = ", ";
-                for (int i = 0; i < longFormato; i++) {
-                    if (i == longFormato - 1) {
-                        coma = "";
+                if(!linea.startsWith("!!")) {
+                    for (int i = 0; i < longFormato; i++) {
+                        if (i == longFormato - 1) {
+                            coma = "";
+                        }
+                        System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
                     }
-                    System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
+                    System.out.println();
                 }
-                System.out.println();
             }
 
         } catch (FileNotFoundException e) {
@@ -188,6 +191,82 @@ public class Apartado2 {
         }
     }
 
+    public static void borrarRegistro() {
+        File fileOriginal = new File(nombFich);
+        File fileTemp = new File(nombFich + ".temp");
+
+        System.out.print("\n[+] Introduce un " + formato.split(SPLIT)[0] + " para borrar: ");
+        String textoBusqueda = sc.nextLine();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(nombFich));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp, true))) {
+            String linea = br.readLine(); //Saltamos la línea del formato
+            bw.write(linea);
+            bw.newLine();
+
+            while ((linea = br.readLine()) != null) {
+
+                if ((linea.split(SPLIT)[0].equals(textoBusqueda))) {
+                    linea = MARCA_BORRADO + linea;
+                    System.out.println("\n[+] Coincidencia encontrada, se marca el registro como borrado ");
+                    bw.write(linea);
+                    bw.newLine();
+                    bw.flush();
+
+                } else {
+                    bw.write(linea);
+                    bw.newLine();
+                    bw.flush();
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // Renombrar el archivo temporal para reemplazar el original
+        if (fileOriginal.delete()) {
+            fileTemp.renameTo(fileOriginal);
+        } else {
+            System.err.println("No se pudo eliminar el archivo original.");
+        }
+    }
+
+    public static void compactarRegistro() {
+        File fileOriginal = new File(nombFich);
+        File fileTemp = new File(nombFich + ".temp");
+
+
+        try (BufferedReader br = new BufferedReader(new FileReader(nombFich));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp, true))) {
+            String linea = br.readLine(); //Saltamos la línea del formato
+            bw.write(linea);
+            bw.newLine();
+
+            while ((linea = br.readLine()) != null) {
+
+                if (!(linea.split(SPLIT)[0].startsWith(MARCA_BORRADO))) {
+                    bw.write(linea);
+                    bw.newLine();
+                    bw.flush();
+                }
+            }
+            System.out.println("\n[+] Fichero compactado correctamente");
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // Renombrar el archivo temporal para reemplazar el original
+        if (fileOriginal.delete()) {
+            fileTemp.renameTo(fileOriginal);
+        } else {
+            System.err.println("No se pudo eliminar el archivo original.");
+        }
+    }
+
 
     public static void menu() {
         System.out.println("\nMENÚ");
@@ -196,6 +275,8 @@ public class Apartado2 {
         System.out.println("2 - Recuperar registro");
         System.out.println("3 - Modificar registro");
         System.out.println("4 - Leer fichero");
+        System.out.println("5 - Borrar registro");
+        System.out.println("6 - Compactar fichero");
     }
 
     public static void main(String[] args) {
@@ -212,7 +293,7 @@ public class Apartado2 {
 
             switch (opcion) {
                 case 0:
-                    System.out.println("Saliendo del apartado 2...");
+                    System.out.println("Saliendo del apartado 4...");
                     break;
                 case 1: //Escribir
                     escribirRegistro();
@@ -225,6 +306,12 @@ public class Apartado2 {
                     break;
                 case 4:
                     leerFichero(); //Leer fichero
+                    break;
+                case 5:
+                    borrarRegistro(); //Marca como borrado un registro
+                    break;
+                case 6:
+                    compactarRegistro(); //Elimina los registros marcados
                     break;
             }
         }

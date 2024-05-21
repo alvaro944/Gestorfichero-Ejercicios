@@ -7,6 +7,7 @@ public class Apartado4 {
     //El fichero va a consistir de 4 campos, ID (campo Clave), DNI, Nombre y Departamento
     private static final String nombFich = "./src/Apartado4/Apartado4.txt";
     private static final String SPLIT = "//";
+    private static final String MARCA_BORRADO = "!!";
 
     private static String formato = "";
     private static int longFormato;
@@ -90,13 +91,15 @@ public class Apartado4 {
             System.out.println("\n[+] Contenido del fichero:");
             while ((linea = br.readLine()) != null) {
                 String coma = ", ";
-                for (int i = 0; i < longFormato; i++) {
-                    if (i == longFormato - 1) {
-                        coma = "";
+                if(!linea.startsWith("!!")) {
+                    for (int i = 0; i < longFormato; i++) {
+                        if (i == longFormato - 1) {
+                            coma = "";
+                        }
+                        System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
                     }
-                    System.out.print(formato.split(SPLIT)[i] + ": " + linea.split(SPLIT)[i] + coma);
+                    System.out.println();
                 }
-                System.out.println();
             }
 
         } catch (FileNotFoundException e) {
@@ -204,7 +207,7 @@ public class Apartado4 {
             while ((linea = br.readLine()) != null) {
 
                 if ((linea.split(SPLIT)[0].equals(textoBusqueda))) {
-                    linea = "!!" + linea;
+                    linea = MARCA_BORRADO + linea;
                     System.out.println("\n[+] Coincidencia encontrada, se marca el registro como borrado ");
                     bw.write(linea);
                     bw.newLine();
@@ -243,7 +246,7 @@ public class Apartado4 {
 
             while ((linea = br.readLine()) != null) {
 
-                if (!(linea.split(SPLIT)[0].startsWith("!!"))) {
+                if (!(linea.split(SPLIT)[0].startsWith(MARCA_BORRADO))) {
                     bw.write(linea);
                     bw.newLine();
                     bw.flush();
@@ -290,7 +293,7 @@ public class Apartado4 {
 
             switch (opcion) {
                 case 0:
-                    System.out.println("Saliendo...");
+                    System.out.println("Saliendo del apartado 4...");
                     break;
                 case 1: //Escribir
                     escribirRegistro();
@@ -305,10 +308,10 @@ public class Apartado4 {
                     leerFichero(); //Leer fichero
                     break;
                 case 5:
-                    borrarRegistro();
+                    borrarRegistro(); //Marca como borrado un registro
                     break;
                 case 6:
-                    compactarRegistro();
+                    compactarRegistro(); //Elimina los registros marcados
                     break;
             }
         }

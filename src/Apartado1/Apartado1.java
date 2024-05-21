@@ -14,15 +14,15 @@ public class Apartado1 {
 
     public static void crearFichero() {
         File file = new File(nombFich);
-        if(!file.exists()){
-            try {
-                System.out.println("\n[+] Creando el fichero " + nombFich);
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try {
+            if (file.createNewFile()) {
+                System.out.println("\n[+] Archivo creado: " + nombFich);
+            } else {
+                System.out.println("\n[*] El archivo ya existe.");
             }
-        } else{
-            System.out.println("\n[+] El fichero " + nombFich + " está creado");
+        } catch (IOException e) {
+            System.err.println("Ocurrió un error al crear el archivo.");
+            e.printStackTrace();
         }
     }
 
@@ -141,6 +141,9 @@ public class Apartado1 {
 
         int opcion = -1;
 
+        //Creamos el fichero si no existe
+        crearFichero();
+
         while(opcion != 0){
             menu();
             System.out.print("\n[*] Introduce una opción: ");
@@ -149,11 +152,10 @@ public class Apartado1 {
 
             switch (opcion){
                 case 0:
-                    System.out.println("Saliendo...");
+                    System.out.println("Saliendo del apartado 1...");
                     break;
                 case 1:
-                    System.out.println("Escribir...");
-                    crearFichero();
+                    System.out.println("Escribir");
                     escribirRegistro("48776886G", "Álvaro Cervantes");
                     escribirRegistro("12345678A", "Pepe Cervantes");
                     escribirRegistro("98765432Z", "Juan Cervantes");
@@ -161,12 +163,12 @@ public class Apartado1 {
 
                     break;
                 case 2:
-                    System.out.println("Recuperar...");
+                    System.out.println("Recuperar");
                     recuperarRegistro("12345678A");
                     recuperarRegistro("45685293Y");
                     break;
                 case 3:
-                    System.out.println("Modificar...");
+                    System.out.println("Modificar");
                     modificarRegistro("48776886G");
                     break;
                 case 4:
